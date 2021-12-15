@@ -5,13 +5,33 @@
  */
 package apphibernatedumitru;
 
+import javax.swing.JOptionPane;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
 /**
  *
  * @author dam2a-28
  */
 public class frmInsertar extends javax.swing.JFrame {
 
+    //Para crear una sesión llamamos al método getSessionFactory()
+    SessionFactory sesion = SessionFactoryUtil.getSessionFactory();
+
+    //Para abrir la sesión llamamos al método openSession().
+    Session session = sesion.openSession();
+
+    /*
+        Para insertar, borrar o modificar una fila en la tabla hay que abrir una
+        transacción.
+        Para abrir una transacción utilizamos el método beginTransaction()
+     */
+    Transaction transaction = session.beginTransaction();
+    //indica el comienzo de una transacción.
+
     /**
+     *
      * Creates new form frmInsertar
      */
     public frmInsertar() {
@@ -67,6 +87,11 @@ public class frmInsertar extends javax.swing.JFrame {
         jLabel10.setText("Destino");
 
         btnAceptar.setText("ACPETAR");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -154,6 +179,37 @@ public class frmInsertar extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        int plazasFumador = Integer.parseInt(txtFumador.getText());
+        int plazasNOFumador = Integer.parseInt(txtNOFumador.getText());
+        int plazasTuristas = Integer.parseInt(txtTurista.getText());
+        int plazasPrimera = Integer.parseInt(txtPrimera.getText());
+        
+        Vuelos vuelo = null;
+        
+        if (txtCodVuelo.getText() == "" || txtFecha.getText() == "" || txtDestino.getText() == "" || txtProcedencia.getText() == "" || txtFumador.getText() == "" || txtNOFumador.getText() == "" || txtTurista.getText() == "" || txtPrimera.getText() == "") {
+            JOptionPane.showMessageDialog(this, "No puedes dejar los campos vacios.");
+
+        } else {
+
+            vuelo = new Vuelos(txtCodVuelo.getText(), txtFecha.getText(), txtDestino.getText(), txtProcedencia.getText(), plazasFumador, plazasNOFumador, plazasTuristas, plazasPrimera);
+            //crea una instancia con valores para todos los atributos.
+            JOptionPane.showMessageDialog(this, "Vuelo introducido.");
+            txtCodVuelo.setText("");
+            txtFecha.setText("");
+            txtDestino.setText("");
+            txtProcedencia.setText("");
+            txtFumador.setText("");
+            txtNOFumador.setText("");
+            txtTurista.setText("");
+            txtPrimera.setText("");
+        }
+
+        session.save(vuelo); //almacena el objeto vuelo
+        transaction.commit(); //valida la transacción
+        session.close(); //debemos cerrar la sesión una vez completada la transacción.
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
     /**
      * @param args the command line arguments
