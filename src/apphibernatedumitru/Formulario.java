@@ -77,6 +77,11 @@ public class Formulario extends javax.swing.JFrame {
         });
 
         jButton3.setText("Borra un vuelo");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Consulta vuelos");
 
@@ -131,6 +136,25 @@ public class Formulario extends javax.swing.JFrame {
         frmModificarDestino modDestino = new frmModificarDestino();
         modDestino.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String codigoVueloIntroducido = JOptionPane.showInputDialog("Introduce el numero del vuelo");
+        
+        if (JOptionPane.showConfirmDialog(this, "¿Seguro que quieres borrarlo?") == 0) {
+            Vuelos vuelo = (Vuelos) session.load(Vuelos.class, (String) codigoVueloIntroducido);
+            session.delete(vuelo);
+            transaction.commit();
+            session.close();
+            
+            JOptionPane.showMessageDialog(this, "Vuelo borrado");
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Has cancelado el borrado");
+        }
+        
+       
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
