@@ -40,6 +40,7 @@ public class Formulario extends javax.swing.JFrame {
     
     public Formulario() {
         initComponents();
+        txtArea.setEditable(false);
         
     }
 
@@ -173,6 +174,7 @@ public class Formulario extends javax.swing.JFrame {
         while (iter.hasNext()) {
             vuelo = (Vuelos) iter.next();
             
+            txtArea.append("CODIGO DE VUELO: " + vuelo.getCodVuelo() + "\n");
             txtArea.append("PROCEDENCIA: " + vuelo.getProcedencia() + "\n");
             txtArea.append("DESTINO: " + vuelo.getDestino() + "\n");
             txtArea.append("HORA DE SALIDA: " + vuelo.getHoraSalida() + "\n");
