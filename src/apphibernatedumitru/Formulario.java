@@ -5,7 +5,10 @@
  */
 package apphibernatedumitru;
 
+import java.util.Iterator;
+import java.util.List;
 import javax.swing.JOptionPane;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -52,9 +55,9 @@ public class Formulario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtArea = new javax.swing.JTextArea();
         btnInsertar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnModificarDestino = new javax.swing.JButton();
+        btnBorrarVuelo = new javax.swing.JButton();
+        btnConsultaVuelos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,21 +72,26 @@ public class Formulario extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Modifica destino");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnModificarDestino.setText("Modifica destino");
+        btnModificarDestino.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnModificarDestinoActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Borra un vuelo");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnBorrarVuelo.setText("Borra un vuelo");
+        btnBorrarVuelo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnBorrarVueloActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Consulta vuelos");
+        btnConsultaVuelos.setText("Consulta vuelos");
+        btnConsultaVuelos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultaVuelosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -94,18 +102,18 @@ public class Formulario extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
+                            .addComponent(btnBorrarVuelo)
                             .addComponent(btnInsertar))
                         .addGap(69, 69, 69)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2)
+                            .addComponent(btnModificarDestino)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton4)
+                                .addComponent(btnConsultaVuelos)
                                 .addGap(3, 3, 3))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(49, Short.MAX_VALUE))
+                        .addGap(27, 27, 27)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,11 +123,11 @@ public class Formulario extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsertar)
-                    .addComponent(jButton2))
+                    .addComponent(btnModificarDestino))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(btnBorrarVuelo)
+                    .addComponent(btnConsultaVuelos))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -132,12 +140,12 @@ public class Formulario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnInsertarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnModificarDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDestinoActionPerformed
         frmModificarDestino modDestino = new frmModificarDestino();
         modDestino.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnModificarDestinoActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnBorrarVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarVueloActionPerformed
         String codigoVueloIntroducido = JOptionPane.showInputDialog("Introduce el numero del vuelo");
         
         if (JOptionPane.showConfirmDialog(this, "¿Seguro que quieres borrarlo?") == 0) {
@@ -154,7 +162,23 @@ public class Formulario extends javax.swing.JFrame {
         
        
         
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnBorrarVueloActionPerformed
+
+    private void btnConsultaVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaVuelosActionPerformed
+        
+        Vuelos vuelo = new Vuelos();
+        Query q = session.createQuery("from Vuelos");
+        List<Vuelos> listaVuelo = q.list();
+        Iterator<Vuelos> iter = listaVuelo.iterator();
+        while (iter.hasNext()) {
+            vuelo = (Vuelos) iter.next();
+            
+            txtArea.append("PROCEDENCIA: " + vuelo.getProcedencia() + "\n");
+            txtArea.append("DESTINO: " + vuelo.getDestino() + "\n");
+            txtArea.append("HORA DE SALIDA: " + vuelo.getHoraSalida() + "\n");
+        }
+        session.close();
+    }//GEN-LAST:event_btnConsultaVuelosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,10 +216,10 @@ public class Formulario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBorrarVuelo;
+    private javax.swing.JButton btnConsultaVuelos;
     private javax.swing.JButton btnInsertar;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnModificarDestino;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea txtArea;
     // End of variables declaration//GEN-END:variables
