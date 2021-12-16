@@ -8,6 +8,7 @@ package apphibernatedumitru;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -149,18 +150,17 @@ public class Formulario extends javax.swing.JFrame {
     private void btnBorrarVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarVueloActionPerformed
         String codigoVueloIntroducido = JOptionPane.showInputDialog("Introduce el numero del vuelo");
         
-        if (JOptionPane.showConfirmDialog(this, "¿Seguro que quieres borrarlo?") == 0) {
-            Vuelos vuelo = (Vuelos) session.load(Vuelos.class, (String) codigoVueloIntroducido);
-            session.delete(vuelo);
-            transaction.commit();
-            session.close();
-            
-            JOptionPane.showMessageDialog(this, "Vuelo borrado");
-            
-        } else {
-            JOptionPane.showMessageDialog(this, "Has cancelado el borrado");
-        }
-        
+            if (JOptionPane.showConfirmDialog(this, "¿Seguro que quieres borrarlo?") == 0) {
+                Vuelos vuelo = (Vuelos) session.load(Vuelos.class, (String) codigoVueloIntroducido);
+                session.delete(vuelo);
+                transaction.commit();
+                session.disconnect();
+
+                JOptionPane.showMessageDialog(this, "Vuelo borrado");
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Has cancelado el borrado");
+            }
        
         
     }//GEN-LAST:event_btnBorrarVueloActionPerformed
@@ -171,15 +171,15 @@ public class Formulario extends javax.swing.JFrame {
         Query q = session.createQuery("from Vuelos");
         List<Vuelos> listaVuelo = q.list();
         Iterator<Vuelos> iter = listaVuelo.iterator();
+        txtArea.setText("");
         while (iter.hasNext()) {
             vuelo = (Vuelos) iter.next();
-            
             txtArea.append("CODIGO DE VUELO: " + vuelo.getCodVuelo() + "\n");
             txtArea.append("PROCEDENCIA: " + vuelo.getProcedencia() + "\n");
             txtArea.append("DESTINO: " + vuelo.getDestino() + "\n");
             txtArea.append("HORA DE SALIDA: " + vuelo.getHoraSalida() + "\n");
         }
-        session.close();
+        session.disconnect();
     }//GEN-LAST:event_btnConsultaVuelosActionPerformed
 
     /**
